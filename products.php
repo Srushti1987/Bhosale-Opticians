@@ -1,56 +1,53 @@
 <?php
-session_start();
-require_once 'config.php';
+require_once '../config.php';
 
-// Set page variables
-$page_title = "Products - Bhosale Opticians";
-$active_page = "products";
-$base_url = "";
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] != 'admin') {
+    header('Location: ../login.php');
+    exit();
+}
+
+$success = '';
+$error = '';
+
+// Delete product
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+    $conn = getDBConnection();
+    $sql = "DELETE FROM products WHERE id = $id";
+    if ($conn->query($sql)) {
+        $success = 'Product deleted successfully!';
+    } else {
+        $error = 'Failed to delete product.';
+    }
+    $conn->close();
+}
+
+// Add product
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_product'])) {
+    $conn = getDBConnection();
+    $name = $conn->real_escape_string($_POST['name']);
+    $description = $conn->real_escape_string($_POST['description']);
+    $price = floatval($_POST['price']);
+    $category = $conn->real_escape_string($_POST['category']);
+    $gender = $conn->real_escape_string($_POST['gender']);
+    $image_url = $conn->real_escape_string($_POST['image_url']);
+    $on_sale = isset($_POST['on_sale']) ? 1 : 0;
+    $stock = intval($_POST['stock']);
+    
+    $sql = "INSERT INTO products (name, description, price, category, gender, image_url, on_sale, stock) 
+            VALUES ('$name', '$description', $price, '$category', '$gender', '$image_url', $on_sale, $stock)";
+    
+    if ($conn->query($sql)) {
+        $success = 'Product added successfully!';
+    } else {
+        $error = 'Failed to add product.';
+    }
+    $conn->close();
+}
 
 // Fetch all products
 $conn = getDBConnection();
-$where = "1=1";
-
-if(isset($_GET['category']) && !empty($_GET['category'])) {
-    $category = $conn->real_escape_string($_GET['category']);
-    $where .= " AND category = '$category'";
-}
-
-if(isset($_GET['gender']) && !empty($_GET['gender'])) {
-    $gender = $conn->real_escape_string($_GET['gender']);
-    $where .= " AND gender = '$gender'";
-}
-
-if(isset($_GET['sale'])) {
-    $where .= " AND on_sale = 1";
-}
-
-// Search
-if(isset($_GET['search']) && !empty($_GET['search'])) {
-    $search = $conn->real_escape_string($_GET['search']);
-    $where .= " AND (name LIKE '%$search%' OR description LIKE '%$search%' OR category LIKE '%$search%')";
-}
-
-// Price filter
-if(isset($_GET['min_price']) && is_numeric($_GET['min_price'])) {
-    $where .= " AND price >= " . floatval($_GET['min_price']);
-}
-if(isset($_GET['max_price']) && is_numeric($_GET['max_price'])) {
-    $where .= " AND price <= " . floatval($_GET['max_price']);
-}
-
-// Sort
-$sort = "created_at DESC";
-if(isset($_GET['sort'])) {
-    switch($_GET['sort']) {
-        case 'price_asc':  $sort = "price ASC"; break;
-        case 'price_desc': $sort = "price DESC"; break;
-        case 'name_asc':   $sort = "name ASC"; break;
-        case 'newest':     $sort = "created_at DESC"; break;
-    }
-}
-
-$sql = "SELECT * FROM products WHERE $where ORDER BY $sort";
+$sql = "SELECT * FROM products ORDER BY created_at DESC";
 $result = $conn->query($sql);
 $products = [];
 if ($result->num_rows > 0) {
@@ -58,169 +55,214 @@ if ($result->num_rows > 0) {
         $products[] = $row;
     }
 }
+
+// Count low stock and out of stock products
+$low_stock_count = 0;
+$out_of_stock_count = 0;
+foreach($products as $product) {
+    if($product['stock'] == 0) {
+        $out_of_stock_count++;
+    } elseif($product['stock'] <= 10) {
+        $low_stock_count++;
+    }
+}
+
 $conn->close();
-
-// Include header
-include 'includes/header.php';
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products - Admin</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
 
-    <!-- Page Header -->
-    <section class="py-5 bg-light">
-        <div class="container text-center">
-            <h1 class="display-4 fw-bold mb-3">
-                <?php 
-                if(isset($_GET['gender'])) {
-                    echo htmlspecialchars($_GET['gender']) . "'s Products";
-                } elseif(isset($_GET['sale'])) {
-                    echo "Products on Sale";
-                } else {
-                    echo "Our Products";
-                }
-                ?>
-            </h1>
-            <p class="lead text-muted">
-                <?php 
-                echo "Showing " . count($products) . " product(s)";
-                if(isset($_GET['gender'])) {
-                    echo " for " . htmlspecialchars($_GET['gender']);
-                }
-                ?>
-            </p>
-            <?php if(isset($_GET['added'])): ?>
-            <div class="alert alert-success mt-3">✓ Product added to cart! <a href="cart-session.php">View Cart</a></div>
-            <?php endif; ?>
-        </div>
-    </section>
-
-    <!-- Filters & Search -->
-    <section class="container my-4">
-        <form method="GET" action="products.php" id="filterForm">
-            <!-- Search Bar -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <input type="text" name="search" class="form-control" placeholder="Search products..." value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
-                        <button class="btn btn-primary" type="submit">🔍 Search</button>
-                        <?php if(!empty($_GET['search'])): ?>
-                        <a href="products.php" class="btn btn-outline-secondary">✕ Clear</a>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <select name="sort" class="form-select" onchange="this.form.submit()">
-                        <option value="newest" <?= ($_GET['sort'] ?? '') == 'newest' ? 'selected' : '' ?>>Sort: Newest</option>
-                        <option value="price_asc" <?= ($_GET['sort'] ?? '') == 'price_asc' ? 'selected' : '' ?>>Price: Low to High</option>
-                        <option value="price_desc" <?= ($_GET['sort'] ?? '') == 'price_desc' ? 'selected' : '' ?>>Price: High to Low</option>
-                        <option value="name_asc" <?= ($_GET['sort'] ?? '') == 'name_asc' ? 'selected' : '' ?>>Name: A to Z</option>
-                    </select>
-                </div>
-                <div class="col-md-3 d-flex gap-2">
-                    <input type="number" name="min_price" class="form-control" placeholder="Min ₹" value="<?= htmlspecialchars($_GET['min_price'] ?? '') ?>">
-                    <input type="number" name="max_price" class="form-control" placeholder="Max ₹" value="<?= htmlspecialchars($_GET['max_price'] ?? '') ?>">
-                    <button class="btn btn-outline-primary" type="submit">Go</button>
+    <header class="sticky-top bg-white shadow-sm">
+        <nav class="navbar navbar-expand-lg container">
+            <div class="container-fluid px-3">
+                <a class="navbar-brand fw-bold fs-4" href="../index.php">
+                    Bhosale Opticians <span class="badge bg-danger">Admin</span>
+                </a>
+                
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.php">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="products.php">Products</a></li>
+                        <li class="nav-item"><a class="nav-link" href="orders.php">Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="appointments.php">Appointments</a></li>
+                        <li class="nav-item"><a class="nav-link" href="users.php">Users</a></li>
+                        <li class="nav-item"><a class="nav-link" href="../logout.php">Logout</a></li>
+                    </ul>
                 </div>
             </div>
-            <!-- Gender Filter Buttons -->
-            <div class="btn-group mb-3 flex-wrap" role="group">
-                <a href="products.php<?= isset($_GET['search']) ? '?search='.urlencode($_GET['search']) : '' ?>" class="btn btn-outline-primary <?= !isset($_GET['gender']) && !isset($_GET['sale']) ? 'active' : '' ?>">All</a>
-                <a href="products.php?gender=Men" class="btn btn-outline-primary <?= ($_GET['gender'] ?? '') == 'Men' ? 'active' : '' ?>">👨 Men</a>
-                <a href="products.php?gender=Women" class="btn btn-outline-primary <?= ($_GET['gender'] ?? '') == 'Women' ? 'active' : '' ?>">👩 Women</a>
-                <a href="products.php?gender=Kids" class="btn btn-outline-primary <?= ($_GET['gender'] ?? '') == 'Kids' ? 'active' : '' ?>">👶 Kids</a>
-                <a href="products.php?sale=1" class="btn btn-outline-danger <?= isset($_GET['sale']) ? 'active' : '' ?>">🔥 On Sale</a>
-            </div>
-            <?php if(isset($_GET['gender'])): ?>
-            <input type="hidden" name="gender" value="<?= htmlspecialchars($_GET['gender']) ?>">
-            <?php endif; ?>
-        </form>
-    </section>
+        </nav>
+    </header>
 
-    <!-- Products Grid -->
     <section class="container my-5">
-        <div class="row g-4">
-            <?php if(count($products) > 0): ?>
-                <?php foreach($products as $product): ?>
-                <div class="col-md-6 col-lg-4 col-xl-3">
-                    <div class="product-card">
-                        <?php if($product['on_sale']): ?>
-                        <span class="sale-badge">SALE</span>
-                        <?php endif; ?>
-                        
-                        <?php if(!empty($product['badge'])): ?>
-                        <span class="product-badge badge-<?= strtolower(str_replace(' ', '-', $product['badge'])) ?>">
-                            <?= htmlspecialchars($product['badge']) ?>
-                        </span>
-                        <?php endif; ?>
-                        
-                        <div class="product-image">
-                            <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
-                        </div>
-                        
-                        <div class="product-body">
-                            <h5 class="product-title">
-                                <a href="product-detail.php?id=<?= $product['id'] ?>" class="text-decoration-none text-dark">
-                                    <?= htmlspecialchars($product['name']) ?>
-                                </a>
-                            </h5>
-                            <p class="product-category text-muted mb-2"><?= htmlspecialchars($product['category']) ?> · <?= htmlspecialchars($product['gender']) ?></p>
-                            <p class="text-muted small mb-3"><?= htmlspecialchars(substr($product['description'], 0, 60)) ?>...</p>
-                            <p class="product-price mb-3">
-                                <?php if($product['on_sale'] && $product['discount_percent'] > 0): ?>
-                                <?php 
-                                    $discount = $product['discount_percent'];
-                                    $original_price = $product['price'] / (1 - ($discount / 100));
-                                ?>
-                                <span class="badge bg-danger mb-2"><?= $discount ?>% OFF</span><br>
-                                <del class="text-danger me-2">₹<?= number_format($original_price, 2) ?></del>
-                                <?php endif; ?>
-                                <span class="fw-bold fs-4 text-brown">₹<?= number_format($product['price'], 2) ?></span>
-                            </p>
-                            
-                            <?php if($product['stock'] > 0): ?>
-                                <?php if($product['stock'] <= 10): ?>
-                                    <p class="text-warning small mb-2">
-                                        <strong>⚠️ Limited Stock - Only <?= $product['stock'] ?> remaining!</strong>
-                                    </p>
-                                <?php endif; ?>
-                                <form action="add-to-cart.php" method="POST" class="product-form">
-                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                                    <input type="hidden" name="product_name" value="<?= htmlspecialchars($product['name']) ?>">
-                                    <input type="hidden" name="product_price" value="<?= $product['price'] ?>">
-                                    <input type="hidden" name="product_image" value="<?= htmlspecialchars($product['image_url']) ?>">
-                                    <input type="hidden" name="quantity" class="qty-value" value="1">
-                                    <input type="hidden" name="max_stock" value="<?= $product['stock'] ?>">
-                                    
-                                    <button type="button" class="btn btn-primary w-100 add-cart-btn" onclick="showQuantity(this)">
-                                        Add to Cart
-                                    </button>
-                                    
-                                    <div class="quantity-section" style="display: none;">
-                                        <div class="mb-2">
-                                            <label class="form-label fw-bold small">Quantity</label>
-                                            <div class="input-group input-group-sm">
-                                                <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity(this)">-</button>
-                                                <input type="text" class="form-control text-center qty-display" value="1" readonly>
-                                                <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity(this)">+</button>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-success w-100 btn-sm">Confirm Add to Cart</button>
-                                    </div>
-                                </form>
-                            <?php else: ?>
-                                <button class="btn btn-secondary w-100" disabled>Out of Stock</button>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="col-12 text-center py-5">
-                    <p class="text-muted">No products found.</p>
-                </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Manage Products</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                + Add New Product
+            </button>
+        </div>
+
+        <?php if($low_stock_count > 0 || $out_of_stock_count > 0): ?>
+        <div class="alert alert-warning alert-dismissible fade show">
+            <strong>⚠️ Stock Alert!</strong>
+            <?php if($out_of_stock_count > 0): ?>
+                <span class="badge bg-danger"><?= $out_of_stock_count ?></span> product(s) are out of stock.
             <?php endif; ?>
+            <?php if($low_stock_count > 0): ?>
+                <span class="badge bg-warning text-dark"><?= $low_stock_count ?></span> product(s) have low stock (≤10 units).
+            <?php endif; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php endif; ?>
+
+        <?php if($success): ?>
+        <div class="alert alert-success alert-dismissible fade show">
+            <?= $success ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php endif; ?>
+        
+        <?php if($error): ?>
+        <div class="alert alert-danger alert-dismissible fade show">
+            <?= $error ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <?php endif; ?>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Sale</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($products as $product): ?>
+                            <tr>
+                                <td><?= $product['id'] ?></td>
+                                <td>
+                                    <img src="<?= htmlspecialchars($product['image_url']) ?>" 
+                                         alt="<?= htmlspecialchars($product['name']) ?>" 
+                                         style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
+                                </td>
+                                <td><?= htmlspecialchars($product['name']) ?></td>
+                                <td><?= htmlspecialchars($product['category']) ?> • <?= htmlspecialchars($product['gender']) ?></td>
+                                <td class="text-brown fw-bold">₹<?= number_format($product['price'], 2) ?></td>
+                                <td>
+                                    <?php if($product['stock'] == 0): ?>
+                                        <span class="badge bg-danger">Out of Stock</span>
+                                    <?php elseif($product['stock'] <= 10): ?>
+                                        <span class="badge bg-warning text-dark"><?= $product['stock'] ?> (Low Stock!)</span>
+                                    <?php else: ?>
+                                        <span class="badge bg-success"><?= $product['stock'] ?></span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php if($product['on_sale']): ?>
+                                    <span class="badge bg-danger">On Sale</span>
+                                    <?php else: ?>
+                                    <span class="badge bg-secondary">No</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <a href="edit-product.php?id=<?= $product['id'] ?>" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="?delete=<?= $product['id'] ?>" class="btn btn-sm btn-outline-danger" 
+                                       onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </section>
 
-<?php
-// Include footer
-include 'includes/footer.php';
-?>
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Category</label>
+                                <select name="category" class="form-control" required>
+                                    <option value="Sunglasses">Sunglasses</option>
+                                    <option value="Eyeglasses">Eyeglasses</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Gender</label>
+                            <select name="gender" class="form-control" required>
+                                <option value="Men">👨 Men</option>
+                                <option value="Women">👩 Women</option>
+                                <option value="Kids">👶 Kids</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Price (₹)</label>
+                                <input type="number" name="price" class="form-control" step="0.01" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Stock</label>
+                                <input type="number" name="stock" class="form-control" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">On Sale</label>
+                                <div class="form-check mt-2">
+                                    <input type="checkbox" name="on_sale" class="form-check-input" id="onSale">
+                                    <label class="form-check-label" for="onSale">Yes</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image URL</label>
+                            <input type="url" name="image_url" class="form-control" required>
+                            <small class="text-muted">Enter the full URL of the product image</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="add_product" class="btn btn-primary">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
