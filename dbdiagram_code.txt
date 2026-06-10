@@ -1,0 +1,164 @@
+// Copy this entire code and paste it at https://dbdiagram.io/
+// It will automatically generate a professional ERD diagram
+
+Table users {
+  user_id int [pk, increment]
+  username varchar
+  email varchar [unique]
+  password varchar
+  phone varchar
+  address varchar
+  city varchar
+  state varchar
+  pincode varchar
+  status varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table admin {
+  admin_id int [pk, increment]
+  username varchar [unique]
+  email varchar [unique]
+  password varchar
+  phone varchar
+  role varchar
+  status varchar
+  last_login timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table products {
+  product_id int [pk, increment]
+  product_name varchar
+  gender varchar
+  description varchar
+  image varchar
+  category varchar
+  discount_percent int
+  brand varchar
+  frame_material varchar
+  model varchar
+  badge varchar
+  lens_type varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table product_images {
+  id int [pk, increment]
+  product_id int
+  image_url varchar
+  alt_text varchar
+  is_primary boolean
+  sort_order int
+  created_at timestamp
+}
+
+Table cart {
+  cart_id int [pk, increment]
+  user_id int
+  product_id int
+  quantity int
+  added_at timestamp
+  updated_at timestamp
+}
+
+Table orders {
+  id int [pk, increment]
+  order_number varchar [unique]
+  user_id int
+  total_amount decimal
+  tax_amount decimal
+  discount_amount decimal
+  final_amount decimal
+  status varchar
+  payment_method varchar
+  payment_status varchar
+  payment_id varchar
+  shipping_address text
+  billing_address text
+  notes text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table order_items {
+  id int [pk, increment]
+  order_id int
+  product_id int
+  product_name varchar
+  quantity int
+  unit_price decimal
+  total_price decimal
+  discount_percent int
+  discount_amount decimal
+  created_at timestamp
+}
+
+Table bill {
+  bill_id int [pk, increment]
+  order_id int [unique]
+  bill_number varchar [unique]
+  bill_date timestamp
+  total_amount decimal
+  tax_amount decimal
+  subtotal decimal
+  discount_amount decimal
+  status varchar
+  created_at timestamp
+}
+
+Table feedback {
+  id int [pk, increment]
+  user_id int
+  order_id int
+  product_id int
+  rating int
+  feedback_text text
+  feedback_type varchar
+  status varchar
+  admin_response text
+  responded_by int
+  responded_at timestamp
+  created_at timestamp
+}
+
+Table stock {
+  id int [pk, increment]
+  product_id int [unique]
+  quantity int
+  reorder_level int
+  updated_by int
+  last_updated timestamp
+}
+
+Table password_resets {
+  id int [pk, increment]
+  email varchar
+  token varchar
+  user_type varchar
+  created_at timestamp
+  expires_at timestamp
+  used_at timestamp
+}
+
+// Relationships
+Ref: users.user_id < orders.user_id
+Ref: users.user_id < cart.user_id
+Ref: users.user_id < feedback.user_id
+Ref: users.user_id < bill.bill_id
+
+Ref: admin.admin_id < feedback.responded_by
+Ref: admin.admin_id < stock.updated_by
+
+Ref: products.product_id < product_images.product_id
+Ref: products.product_id < cart.product_id
+Ref: products.product_id < order_items.product_id
+Ref: products.product_id < feedback.product_id
+Ref: products.product_id - stock.product_id
+
+Ref: orders.id < order_items.order_id
+Ref: orders.id - bill.order_id
+Ref: orders.id < feedback.order_id

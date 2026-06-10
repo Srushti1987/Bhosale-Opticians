@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Dictionary - Bhosale Opticians E-Commerce System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #333;
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 2.2em;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .table-section {
+            margin-bottom: 40px;
+        }
+        
+        .table-title {
+            background: #333;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .table-description {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 0;
+            border-left: 4px solid #007bff;
+            font-style: italic;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        tr:hover {
+            background: #e3f2fd;
+        }
+        
+        .primary-key {
+            background: #ffeb3b !important;
+            font-weight: bold;
+        }
+        
+        .foreign-key {
+            background: #ff9800 !important;
+            color: white;
+        }
+        
+        .unique-key {
+            background: #4caf50 !important;
+            color: white;
+        }
+        
+        .data-type {
+            font-family: 'Courier New', monospace;
+            background: #e8f5e8;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .constraint {
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .legend h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin-right: 30px;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        
+        .legend-pk { background: #ffeb3b; }
+        .legend-fk { background: #ff9800; color: white; }
+        .legend-uk { background: #4caf50; color: white; }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 8px;
+        }
+        
+        .toc a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DATA DICTIONARY</h1>
+            <p><strong>Bhosale Opticians E-Commerce System</strong></p>
+            <p>Database: sunray_db | Version 2.0 | March 8, 2026</p>
+        </div>
+        
+        <div class="toc">
+            <h3>Table of Contents</h3>
+            <ul>
+                <li><a href="#users">1. Users Table</a></li>
+                <li><a href="#admins">2. Admins Table</a></li>
+                <li><a href="#products">3. Products Table</a></li>
+                <li><a href="#product_images">4. Product Images Table</a></li>
+                <li><a href="#stock">5. Stock Table</a></li>
+                <li><a href="#cart">6. Cart Table</a></li>
+                <li><a href="#orders">7. Orders Table</a></li>
+                <li><a href="#order_items">8. Order Items Table</a></li>
+                <li><a href="#bills">9. Bills Table</a></li>
+                <li><a href="#feedback">10. Feedback Table</a></li>
+                <li><a href="#password_resets">11. Password Resets Table</a></li>
+            </ul>
+        </div>
+
+        <!-- USERS TABLE -->
+        <div class="table-section" id="users">
+            <h2 class="table-title">1. USERS TABLE</h2>
+            <p class="table-description">
+                Stores customer information including personal details, contact information, and address details for order delivery.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each user</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Full name of the customer</td>
+                        <td>John Doe, Priya Sharma</td>
+                    </tr>
+                    <tr class="unique-key">
+                        <td>email</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>UNIQUE, NOT NULL</td>
+                        <td>Email address for login and communication</td>
+                        <td>john@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>password</td>
+                        <td><span class="data-type">VARCHAR(255)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Encrypted password for authentication</td>
+                        <td>$2y$10$92IXUNpkjO0r...</td>
+                    </tr>
+                    <tr>
+                        <td>phone</td>
+                        <td><span class="data-type">VARCHAR(15)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Contact phone number</td>
+                        <td>9960815363, +91-9876543210</td>
+                    </tr>
+                    <tr>
+                        <td>address</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Complete address for delivery</td>
+                        <td>123 Main Street, Apartment 4B</td>
+                    </tr>
+                    <tr>
+                        <td>city</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>City name</td>
+                        <td>Mumbai, Pune, Delhi</td>
+                    </tr>
+                    <tr>
+                        <td>state</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>State name</td>
+                        <td>Maharashtra, Karnataka</td>
+                    </tr>
+                    <tr>
+                        <td>pincode</td>
+                        <td><span class="data-type">VARCHAR(10)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Postal code for delivery</td>
+                        <td>400001, 411001</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('active', 'inactive') DEFAULT 'active'</td>
+                        <td>Account status</td>
+                        <td>active, inactive</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Account creation timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>updated_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                        <td>Last update timestamp</td>
+                        <td>2026-03-08 15:45:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ADMINS TABLE -->
+        <div class="table-section" id="admins">
+            <h2 class="table-title">2. ADMINS TABLE</h2>
+            <p class="table-description">
+                Stores administrator information with role-based access control and permission management for system administration.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each admin</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Full name of the administrator</td>
+                        <td>Admin User, Manager Name</td>
+                    </tr>
+                    <tr class="unique-key">
+                        <td>email</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>UNIQUE, NOT NULL</td>
+                        <td>Email address for admin login</td>
+                        <td>admin@sunray.com</td>
+                    </tr>
+                    <tr>
+                        <td>password</td>
+                        <td><span class="data-type">VARCHAR(255)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Encrypted password for authentication</td>
+                        <td>$2y$10$92IXUNpkjO0r...</td>
+                    </tr>
+                    <tr>
+                        <td>phone</td>
+                        <td><span class="data-type">VARCHAR(15)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Contact phone number</td>
+                        <td>9960815363</td>
+                    </tr>
+                    <tr>
+                        <td>role</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('super_admin', 'admin', 'manager') DEFAULT 'admin'</td>
+                        <td>Administrative role level</td>
+                        <td>super_admin, admin, manager</td>
+                    </tr>
+                    <tr>
+                        <td>permissions</td>
+                        <td><span class="data-type">JSON</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>JSON object storing specific permissions</td>
+                        <td>{"products": "write", "orders": "read"}</td>
+                    </tr>
+                    <tr>
+                        <td>last_login</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>NULL</td>
+                        <td>Last login timestamp</td>
+                        <td>2026-03-08 09:15:00</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('active', 'inactive') DEFAULT 'active'</td>
+                        <td>Admin account status</td>
+                        <td>active, inactive</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Account creation timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>updated_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                        <td>Last update timestamp</td>
+                        <td>2026-03-08 15:45:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- PRODUCTS TABLE -->
+        <div class="table-section" id="products">
+            <h2 class="table-title">3. PRODUCTS TABLE</h2>
+            <p class="table-description">
+                Stores detailed product information including eyeglasses and sunglasses with specifications, pricing, and inventory details.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each product</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Product name/title</td>
+                        <td>Classic Aviator Gold, Cat Eye Elegance</td>
+                    </tr>
+                    <tr>
+                        <td>description</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>NULL</td>
+                        <td>Detailed product description</td>
+                        <td>Premium aviator sunglasses with UV protection</td>
+                    </tr>
+                    <tr>
+                        <td>price</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Product price in Indian Rupees</td>
+                        <td>2999.00, 3499.50</td>
+                    </tr>
+                    <tr>
+                        <td>category</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Product category</td>
+                        <td>Sunglasses, Eyeglasses</td>
+                    </tr>
+                    <tr>
+                        <td>gender</td>
+                        <td><span class="data-type">VARCHAR(20)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Target gender category</td>
+                        <td>Men, Women, Kids</td>
+                    </tr>
+                    <tr>
+                        <td>brand</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Product brand name</td>
+                        <td>Ray-Ban, Oakley, Local Brand</td>
+                    </tr>
+                    <tr>
+                        <td>model</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Product model number</td>
+                        <td>RB3025, OO9208</td>
+                    </tr>
+                    <tr>
+                        <td>frame_material</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Frame material type</td>
+                        <td>Metal, Plastic, Titanium</td>
+                    </tr>
+                    <tr>
+                        <td>lens_type</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Lens type and features</td>
+                        <td>Polarized, UV Protection, Blue Light</td>
+                    </tr>
+                    <tr>
+                        <td>on_sale</td>
+                        <td><span class="data-type">BOOLEAN</span></td>
+                        <td>DEFAULT FALSE</td>
+                        <td>Whether product is on sale</td>
+                        <td>TRUE, FALSE</td>
+                    </tr>
+                    <tr>
+                        <td>discount_percent</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>Discount percentage (0-100)</td>
+                        <td>10, 25, 30</td>
+                    </tr>
+                    <tr>
+                        <td>badge</td>
+                        <td><span class="data-type">VARCHAR(50)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Product badge/label</td>
+                        <td>New, Bestseller, Limited Edition</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('active', 'inactive', 'discontinued') DEFAULT 'active'</td>
+                        <td>Product availability status</td>
+                        <td>active, inactive, discontinued</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Product creation timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>updated_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                        <td>Last update timestamp</td>
+                        <td>2026-03-08 15:45:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PRODUCT_IMAGES TABLE -->
+        <div class="table-section" id="product_images">
+            <h2 class="table-title">4. PRODUCT_IMAGES TABLE</h2>
+            <p class="table-description">
+                Stores multiple images for each product with primary image designation and sorting capabilities.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each image</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>product_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES products(id), NOT NULL</td>
+                        <td>Reference to product</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>image_url</td>
+                        <td><span class="data-type">VARCHAR(255)</span></td>
+                        <td>NOT NULL</td>
+                        <td>URL or path to image file</td>
+                        <td>https://images.unsplash.com/photo-...</td>
+                    </tr>
+                    <tr>
+                        <td>alt_text</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Alternative text for accessibility</td>
+                        <td>Classic Aviator Gold Front View</td>
+                    </tr>
+                    <tr>
+                        <td>is_primary</td>
+                        <td><span class="data-type">BOOLEAN</span></td>
+                        <td>DEFAULT FALSE</td>
+                        <td>Whether this is the primary product image</td>
+                        <td>TRUE, FALSE</td>
+                    </tr>
+                    <tr>
+                        <td>sort_order</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>Display order of images</td>
+                        <td>0, 1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Image upload timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- STOCK TABLE -->
+        <div class="table-section" id="stock">
+            <h2 class="table-title">5. STOCK TABLE</h2>
+            <p class="table-description">
+                Manages inventory levels, reserved quantities, and reorder points for all products with admin tracking.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each stock record</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>product_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES products(id), NOT NULL</td>
+                        <td>Reference to product</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>quantity</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>NOT NULL DEFAULT 0</td>
+                        <td>Available stock quantity</td>
+                        <td>50, 25, 0</td>
+                    </tr>
+                    <tr>
+                        <td>reserved_quantity</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>Quantity reserved for pending orders</td>
+                        <td>5, 10, 0</td>
+                    </tr>
+                    <tr>
+                        <td>reorder_level</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>DEFAULT 10</td>
+                        <td>Minimum stock level before reorder alert</td>
+                        <td>10, 5, 20</td>
+                    </tr>
+                    <tr>
+                        <td>last_updated</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                        <td>Last stock update timestamp</td>
+                        <td>2026-03-08 15:45:00</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>updated_by</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES admins(id), DEFAULT NULL</td>
+                        <td>Admin who last updated stock</td>
+                        <td>1, 2, NULL</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CART TABLE -->
+        <div class="table-section" id="cart">
+            <h2 class="table-title">6. CART TABLE</h2>
+            <p class="table-description">
+                Stores persistent shopping cart data for users with product quantities and timestamps.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each cart item</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>user_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES users(id), NOT NULL</td>
+                        <td>Reference to user who owns the cart</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>product_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES products(id), NOT NULL</td>
+                        <td>Reference to product in cart</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>quantity</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>NOT NULL DEFAULT 1</td>
+                        <td>Quantity of product in cart</td>
+                        <td>1, 2, 5</td>
+                    </tr>
+                    <tr>
+                        <td>added_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>When item was added to cart</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>updated_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                        <td>Last update timestamp</td>
+                        <td>2026-03-08 15:45:00</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="constraint"><strong>Unique Constraint:</strong> UNIQUE KEY unique_user_product (user_id, product_id) - Prevents duplicate products in same user's cart</p>
+        </div>
+        <!-- ORDERS TABLE -->
+        <div class="table-section" id="orders">
+            <h2 class="table-title">7. ORDERS TABLE</h2>
+            <p class="table-description">
+                Stores comprehensive order information including pricing, payment details, shipping addresses, and order status tracking.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each order</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>user_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES users(id), NOT NULL</td>
+                        <td>Reference to customer who placed order</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="unique-key">
+                        <td>order_number</td>
+                        <td><span class="data-type">VARCHAR(20)</span></td>
+                        <td>UNIQUE, NOT NULL</td>
+                        <td>Human-readable order number</td>
+                        <td>ORD-2026-001, ORD-2026-002</td>
+                    </tr>
+                    <tr>
+                        <td>total_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Total order amount before tax and discount</td>
+                        <td>5999.00, 12500.50</td>
+                    </tr>
+                    <tr>
+                        <td>tax_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>GST/tax amount applied</td>
+                        <td>1079.82, 2250.09</td>
+                    </tr>
+                    <tr>
+                        <td>discount_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>Total discount applied</td>
+                        <td>599.90, 0.00</td>
+                    </tr>
+                    <tr>
+                        <td>final_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Final payable amount after tax and discount</td>
+                        <td>6479.92, 14750.59</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded') DEFAULT 'pending'</td>
+                        <td>Current order status</td>
+                        <td>pending, confirmed, delivered</td>
+                    </tr>
+                    <tr>
+                        <td>payment_method</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('cod', 'online', 'card') DEFAULT 'cod'</td>
+                        <td>Payment method chosen</td>
+                        <td>cod, online, card</td>
+                    </tr>
+                    <tr>
+                        <td>payment_status</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('pending', 'paid', 'failed', 'refunded') DEFAULT 'pending'</td>
+                        <td>Payment processing status</td>
+                        <td>pending, paid, failed</td>
+                    </tr>
+                    <tr>
+                        <td>payment_id</td>
+                        <td><span class="data-type">VARCHAR(255)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Payment gateway transaction ID</td>
+                        <td>pay_123456789, NULL</td>
+                    </tr>
+                    <tr>
+                        <td>shipping_address</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>NOT NULL</td>
+                        <td>Complete shipping address</td>
+                        <td>123 Main St, Mumbai, Maharashtra 400001</td>
+                    </tr>
+                    <tr>
+                        <td>billing_address</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Billing address if different from shipping</td>
+                        <td>456 Office St, Pune, Maharashtra 411001</td>
+                    </tr>
+                    <tr>
+                        <td>notes</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Special instructions or notes</td>
+                        <td>Please deliver after 6 PM</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Order placement timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>updated_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP</td>
+                        <td>Last update timestamp</td>
+                        <td>2026-03-08 15:45:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ORDER_ITEMS TABLE -->
+        <div class="table-section" id="order_items">
+            <h2 class="table-title">8. ORDER_ITEMS TABLE</h2>
+            <p class="table-description">
+                Stores individual items within each order with detailed pricing breakdown and product information snapshot.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each order item</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>order_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES orders(id), NOT NULL</td>
+                        <td>Reference to parent order</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>product_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES products(id), NOT NULL</td>
+                        <td>Reference to ordered product</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>product_name</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Product name snapshot at time of order</td>
+                        <td>Classic Aviator Gold, Cat Eye Elegance</td>
+                    </tr>
+                    <tr>
+                        <td>quantity</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>NOT NULL</td>
+                        <td>Quantity of product ordered</td>
+                        <td>1, 2, 5</td>
+                    </tr>
+                    <tr>
+                        <td>unit_price</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Price per unit at time of order</td>
+                        <td>2999.00, 3499.50</td>
+                    </tr>
+                    <tr>
+                        <td>total_price</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Total price for this item (unit_price × quantity)</td>
+                        <td>2999.00, 6999.00</td>
+                    </tr>
+                    <tr>
+                        <td>discount_percent</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>Discount percentage applied to this item</td>
+                        <td>10, 25, 0</td>
+                    </tr>
+                    <tr>
+                        <td>discount_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>Discount amount for this item</td>
+                        <td>299.90, 1749.75</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Order item creation timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- BILLS TABLE -->
+        <div class="table-section" id="bills">
+            <h2 class="table-title">9. BILLS TABLE</h2>
+            <p class="table-description">
+                Manages invoice generation and billing information separate from orders for better financial tracking.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each bill</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>order_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES orders(id), NOT NULL</td>
+                        <td>Reference to associated order</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="unique-key">
+                        <td>bill_number</td>
+                        <td><span class="data-type">VARCHAR(20)</span></td>
+                        <td>UNIQUE, NOT NULL</td>
+                        <td>Human-readable bill number</td>
+                        <td>BILL-2026-001, INV-2026-002</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>user_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES users(id), NOT NULL</td>
+                        <td>Reference to customer</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>subtotal</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Subtotal before tax and discount</td>
+                        <td>5999.00, 12500.50</td>
+                    </tr>
+                    <tr>
+                        <td>tax_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>GST/tax amount</td>
+                        <td>1079.82, 2250.09</td>
+                    </tr>
+                    <tr>
+                        <td>discount_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>DEFAULT 0</td>
+                        <td>Total discount applied</td>
+                        <td>599.90, 0.00</td>
+                    </tr>
+                    <tr>
+                        <td>total_amount</td>
+                        <td><span class="data-type">DECIMAL(10,2)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Final bill amount</td>
+                        <td>6479.92, 14750.59</td>
+                    </tr>
+                    <tr>
+                        <td>bill_date</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Bill generation date</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>due_date</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>NULL</td>
+                        <td>Payment due date (if applicable)</td>
+                        <td>2026-03-15 23:59:59</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('generated', 'sent', 'paid', 'overdue') DEFAULT 'generated'</td>
+                        <td>Bill status</td>
+                        <td>generated, sent, paid</td>
+                    </tr>
+                    <tr>
+                        <td>notes</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Additional billing notes</td>
+                        <td>Thank you for your business!</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Bill creation timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- FEEDBACK TABLE -->
+        <div class="table-section" id="feedback">
+            <h2 class="table-title">10. FEEDBACK TABLE</h2>
+            <p class="table-description">
+                Stores customer feedback and ratings with admin response capabilities and categorization by feedback type.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each feedback</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>user_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES users(id), NOT NULL</td>
+                        <td>Reference to customer who gave feedback</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>order_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES orders(id), DEFAULT NULL</td>
+                        <td>Reference to related order (if applicable)</td>
+                        <td>1, 2, NULL</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>product_id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES products(id), DEFAULT NULL</td>
+                        <td>Reference to specific product (if applicable)</td>
+                        <td>1, 2, NULL</td>
+                    </tr>
+                    <tr>
+                        <td>rating</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>NOT NULL CHECK (rating >= 1 AND rating <= 5)</td>
+                        <td>Rating from 1 to 5 stars</td>
+                        <td>1, 2, 3, 4, 5</td>
+                    </tr>
+                    <tr>
+                        <td>feedback_text</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>NOT NULL</td>
+                        <td>Customer feedback message</td>
+                        <td>Great product quality and fast delivery!</td>
+                    </tr>
+                    <tr>
+                        <td>feedback_type</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('product', 'service', 'delivery', 'general') DEFAULT 'general'</td>
+                        <td>Category of feedback</td>
+                        <td>product, service, delivery, general</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('pending', 'approved', 'rejected') DEFAULT 'pending'</td>
+                        <td>Admin moderation status</td>
+                        <td>pending, approved, rejected</td>
+                    </tr>
+                    <tr>
+                        <td>admin_response</td>
+                        <td><span class="data-type">TEXT</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>Admin response to feedback</td>
+                        <td>Thank you for your feedback! We're glad you're satisfied.</td>
+                    </tr>
+                    <tr class="foreign-key">
+                        <td>responded_by</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>FOREIGN KEY REFERENCES admins(id), DEFAULT NULL</td>
+                        <td>Admin who responded to feedback</td>
+                        <td>1, 2, NULL</td>
+                    </tr>
+                    <tr>
+                        <td>responded_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>NULL</td>
+                        <td>When admin responded</td>
+                        <td>2026-03-08 16:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Feedback submission timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PASSWORD_RESETS TABLE -->
+        <div class="table-section" id="password_resets">
+            <h2 class="table-title">11. PASSWORD_RESETS TABLE</h2>
+            <p class="table-description">
+                Manages password reset tokens for both users and admins with enhanced security tracking and expiration.
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th>Data Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="primary-key">
+                        <td>id</td>
+                        <td><span class="data-type">INT</span></td>
+                        <td>PRIMARY KEY, AUTO_INCREMENT</td>
+                        <td>Unique identifier for each reset token</td>
+                        <td>1, 2, 3...</td>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td><span class="data-type">VARCHAR(100)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Email address requesting password reset</td>
+                        <td>john@example.com, admin@sunray.com</td>
+                    </tr>
+                    <tr>
+                        <td>token</td>
+                        <td><span class="data-type">VARCHAR(255)</span></td>
+                        <td>NOT NULL</td>
+                        <td>Unique reset token</td>
+                        <td>abc123def456ghi789...</td>
+                    </tr>
+                    <tr>
+                        <td>user_type</td>
+                        <td><span class="data-type">ENUM</span></td>
+                        <td>('user', 'admin') NOT NULL</td>
+                        <td>Type of account requesting reset</td>
+                        <td>user, admin</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>DEFAULT CURRENT_TIMESTAMP</td>
+                        <td>Token creation timestamp</td>
+                        <td>2026-03-08 10:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>expires_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>NOT NULL</td>
+                        <td>Token expiration timestamp (1 hour from creation)</td>
+                        <td>2026-03-08 11:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>used_at</td>
+                        <td><span class="data-type">TIMESTAMP</span></td>
+                        <td>NULL</td>
+                        <td>When token was used for password reset</td>
+                        <td>2026-03-08 10:45:00, NULL</td>
+                    </tr>
+                    <tr>
+                        <td>ip_address</td>
+                        <td><span class="data-type">VARCHAR(45)</span></td>
+                        <td>DEFAULT NULL</td>
+                        <td>IP address of reset request (security tracking)</td>
+                        <td>192.168.1.100, 2001:db8::1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- LEGEND -->
+        <div class="legend">
+            <h3>Legend:</h3>
+            <div class="legend-item legend-pk">Primary Key (PK)</div>
+            <div class="legend-item legend-fk">Foreign Key (FK)</div>
+            <div class="legend-item legend-uk">Unique Key (UK)</div>
+        </div>
+
+        <!-- DATABASE RELATIONSHIPS -->
+        <div class="legend" style="margin-top: 20px;">
+            <h3>Key Database Relationships:</h3>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li><strong>Users → Orders:</strong> One-to-Many (One user can have multiple orders)</li>
+                <li><strong>Users → Cart:</strong> One-to-Many (One user can have multiple cart items)</li>
+                <li><strong>Users → Feedback:</strong> One-to-Many (One user can give multiple feedback)</li>
+                <li><strong>Products → Product_Images:</strong> One-to-Many (One product can have multiple images)</li>
+                <li><strong>Products → Stock:</strong> One-to-One (Each product has one stock record)</li>
+                <li><strong>Products → Cart:</strong> One-to-Many (One product can be in multiple carts)</li>
+                <li><strong>Orders → Order_Items:</strong> One-to-Many (One order can have multiple items)</li>
+                <li><strong>Orders → Bills:</strong> One-to-One (Each order generates one bill)</li>
+                <li><strong>Admins → Stock:</strong> One-to-Many (One admin can update multiple stock records)</li>
+                <li><strong>Admins → Feedback:</strong> One-to-Many (One admin can respond to multiple feedback)</li>
+            </ul>
+        </div>
+
+        <!-- BUSINESS RULES -->
+        <div class="legend" style="margin-top: 20px;">
+            <h3>Important Business Rules:</h3>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li><strong>Stock Management:</strong> Available quantity = Total quantity - Reserved quantity</li>
+                <li><strong>Pricing:</strong> All prices are in Indian Rupees (₹)</li>
+                <li><strong>GST Calculation:</strong> 18% GST applied on all products</li>
+                <li><strong>Discount Range:</strong> Variable discount percentages (10%-30%)</li>
+                <li><strong>Payment Method:</strong> Currently supports COD (Cash on Delivery) only</li>
+                <li><strong>Stock Alert:</strong> Reorder alert when stock ≤ reorder_level (default: 10)</li>
+                <li><strong>Password Reset:</strong> Tokens expire after 1 hour</li>
+                <li><strong>Feedback Rating:</strong> Must be between 1-5 stars</li>
+                <li><strong>Order Status Flow:</strong> pending → confirmed → processing → shipped → delivered</li>
+                <li><strong>User Types:</strong> Separate tables for customers (users) and administrators (admins)</li>
+            </ul>
+        </div>
+
+        <!-- INDEXES -->
+        <div class="legend" style="margin-top: 20px;">
+            <h3>Database Indexes for Performance:</h3>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li><strong>idx_users_email:</strong> Fast user login lookup</li>
+                <li><strong>idx_admins_email:</strong> Fast admin login lookup</li>
+                <li><strong>idx_products_category:</strong> Product filtering by category</li>
+                <li><strong>idx_products_gender:</strong> Product filtering by gender</li>
+                <li><strong>idx_products_status:</strong> Active product queries</li>
+                <li><strong>idx_stock_product:</strong> Stock lookup by product</li>
+                <li><strong>idx_cart_user:</strong> User cart retrieval</li>
+                <li><strong>idx_orders_user:</strong> User order history</li>
+                <li><strong>idx_orders_status:</strong> Order status filtering</li>
+                <li><strong>idx_order_items_order:</strong> Order item lookup</li>
+                <li><strong>idx_feedback_user:</strong> User feedback lookup</li>
+                <li><strong>idx_feedback_product:</strong> Product feedback lookup</li>
+            </ul>
+        </div>
+
+        <!-- FOOTER -->
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #333; text-align: center; color: #666;">
+            <p><strong>Bhosale Opticians E-Commerce System</strong></p>
+            <p>Data Dictionary Version 2.0 | Generated on March 8, 2026</p>
+            <p>Contact: bhosaleopticians@gmail.com | Phone: 9960815363</p>
+        </div>
+    </div>
+</body>
+</html>

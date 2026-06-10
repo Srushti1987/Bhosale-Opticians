@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERD - Chen Notation - Bhosale Opticians</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #333;
+        }
+        .header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .erd-canvas {
+            position: relative;
+            min-height: 2000px;
+            background: white;
+            border: 2px solid #ddd;
+            padding: 40px;
+        }
+        /* Entity - Rectangle */
+        .entity {
+            position: absolute;
+            border: 3px solid #000;
+            background: white;
+            padding: 15px 25px;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            min-width: 100px;
+        }
+        /* Attribute - Oval */
+        .attribute {
+            position: absolute;
+            border: 2px solid #000;
+            border-radius: 50%;
+            background: white;
+            padding: 8px 15px;
+            font-size: 11px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        /* Primary Key Attribute - Underlined */
+        .attribute.pk {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        /* Relationship - Diamond */
+        .relationship {
+            position: absolute;
+            width: 120px;
+            height: 80px;
+            background: white;
+            border: 3px solid #000;
+            transform: rotate(45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .relationship-text {
+            transform: rotate(-45deg);
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.2;
+        }
+        /* Cardinality Labels */
+        .cardinality {
+            position: absolute;
+            font-weight: bold;
+            font-size: 16px;
+            color: #000;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ENTITY RELATIONSHIP DIAGRAM</h1>
+            <h2>Chen Notation</h2>
+            <p><strong>Bhosale Opticians E-Commerce System</strong></p>
+            <p>March 10, 2026</p>
+        </div>
+        <div class="erd-canvas">
+            <!-- USER Entity -->
+            <div class="entity" style="left: 800px; top: 50px;">USER</div>
+            <div class="attribute pk" style="left: 750px; top: 10px;">user_id</div>
+            <div class="attribute" style="left: 900px; top: 10px;">username</div>
+            <div class="attribute" style="left: 1000px; top: 50px;">email</div>
+            <div class="attribute" style="left: 1000px; top: 90px;">password</div>
+            <div class="attribute" style="left: 900px; top: 130px;">phone</div>
+            <div class="attribute" style="left: 750px; top: 130px;">address</div>
+            <div class="attribute" style="left: 650px; top: 90px;">city</div>
+            <div class="attribute" style="left: 650px; top: 50px;">state</div>
+            
+            <!-- ADMIN Entity -->
+            <div class="entity" style="left: 100px; top: 300px;">ADMIN</div>
+            <div class="attribute pk" style="left: 50px; top: 260px;">admin_id</div>
+            <div class="attribute" style="left: 150px; top: 240px;">username</div>
+            <div class="attribute" style="left: 250px; top: 280px;">email</div>
+            <div class="attribute" style="left: 250px; top: 330px;">password</div>
+            <div class="attribute" style="left: 150px; top: 370px;">role</div>
+            <div class="attribute" style="left: 50px; top: 350px;">phone</div>
+            
+            <!-- PRODUCT Entity -->
+            <div class="entity" style="left: 400px; top: 600px;">PRODUCT</div>
+            <div class="attribute pk" style="left: 350px; top: 550px;">product_id</div>
+            <div class="attribute" style="left: 480px; top: 540px;">product_name</div>
+            <div class="attribute" style="left: 600px; top: 580px;">gender</div>
+            <div class="attribute" style="left: 600px; top: 630px;">category</div>
+            <div class="attribute" style="left: 480px; top: 670px;">brand</div>
+            <div class="attribute" style="left: 350px; top: 660px;">model</div>
+            <div class="attribute" style="left: 250px; top: 620px;">price</div>
+            <div class="attribute" style="left: 250px; top: 570px;">image</div>
+            
+            <!-- CART Entity -->
+            <div class="entity" style="left: 100px; top: 800px;">CART</div>
+            <div class="attribute pk" style="left: 50px; top: 760px;">cart_id</div>
+            <div class="attribute" style="left: 180px; top: 750px;">quantity</div>
+            <div class="attribute" style="left: 180px; top: 850px;">added_at</div>
+            
+            <!-- ORDER Entity -->
+            <div class="entity" style="left: 800px; top: 600px;">ORDER</div>
+            <div class="attribute pk" style="left: 750px; top: 550px;">order_id</div>
+            <div class="attribute" style="left: 880px; top: 540px;">order_number</div>
+            <div class="attribute" style="left: 980px; top: 580px;">total_amount</div>
+            <div class="attribute" style="left: 980px; top: 630px;">status</div>
+            <div class="attribute" style="left: 880px; top: 670px;">payment_method</div>
+            <div class="attribute" style="left: 750px; top: 660px;">shipping_address</div>
+            
+            <!-- ORDER_ITEMS Entity -->
+            <div class="entity" style="left: 600px; top: 900px;">ORDER_ITEMS</div>
+            <div class="attribute pk" style="left: 550px; top: 850px;">id</div>
+            <div class="attribute" style="left: 700px; top: 850px;">quantity</div>
+            <div class="attribute" style="left: 750px; top: 900px;">unit_price</div>
+            <div class="attribute" style="left: 700px; top: 950px;">total_price</div>
+            <div class="attribute" style="left: 550px; top: 950px;">product_name</div>
+            
+            <!-- BILL Entity -->
+            <div class="entity" style="left: 1100px; top: 600px;">BILL</div>
+            <div class="attribute pk" style="left: 1050px; top: 550px;">bill_id</div>
+            <div class="attribute" style="left: 1180px; top: 540px;">bill_number</div>
+            <div class="attribute" style="left: 1280px; top: 580px;">bill_date</div>
+            <div class="attribute" style="left: 1280px; top: 630px;">total_amount</div>
+            <div class="attribute" style="left: 1180px; top: 670px;">tax_amount</div>
+            <div class="attribute" style="left: 1050px; top: 660px;">subtotal</div>
+            
+            <!-- FEEDBACK Entity -->
+            <div class="entity" style="left: 800px; top: 1200px;">FEEDBACK</div>
+            <div class="attribute pk" style="left: 750px; top: 1150px;">id</div>
+            <div class="attribute" style="left: 880px; top: 1140px;">rating</div>
+            <div class="attribute" style="left: 980px; top: 1180px;">feedback_text</div>
+            <div class="attribute" style="left: 980px; top: 1230px;">feedback_type</div>
+            <div class="attribute" style="left: 880px; top: 1270px;">admin_response</div>
+            <div class="attribute" style="left: 750px; top: 1260px;">status</div>
+            
+            <!-- STOCK Entity -->
+            <div class="entity" style="left: 400px; top: 1200px;">STOCK</div>
+            <div class="attribute pk" style="left: 350px; top: 1150px;">stock_id</div>
+            <div class="attribute" style="left: 480px; top: 1140px;">quantity</div>
+            <div class="attribute" style="left: 550px; top: 1200px;">reorder_level</div>
+            <div class="attribute" style="left: 480px; top: 1260px;">last_updated</div>
+            
+            <!-- PRODUCT_IMAGES Entity -->
+            <div class="entity" style="left: 100px; top: 600px;">PRODUCT_IMAGES</div>
+            <div class="attribute pk" style="left: 50px; top: 550px;">id</div>
+            <div class="attribute" style="left: 180px; top: 540px;">image_url</div>
+            <div class="attribute" style="left: 250px; top: 580px;">is_primary</div>
+            <div class="attribute" style="left: 180px; top: 660px;">alt_text</div>
+            
+            <!-- PASSWORD_RESETS Entity -->
+            <div class="entity" style="left: 100px; top: 50px;">PASSWORD_RESETS</div>
+            <div class="attribute pk" style="left: 50px; top: 10px;">id</div>
+            <div class="attribute" style="left: 200px; top: 10px;">email</div>
+            <div class="attribute" style="left: 280px; top: 50px;">token</div>
+            <div class="attribute" style="left: 200px; top: 100px;">user_type</div>
+            <div class="attribute" style="left: 50px; top: 100px;">expires_at</div>
+            <!-- Relationships -->
+            
+            <!-- Placing Order (USER to ORDER) -->
+            <div class="relationship" style="left: 790px; top: 320px;">
+                <div class="relationship-text">Placing<br>Order</div>
+            </div>
+            <div class="cardinality" style="left: 850px; top: 120px;">1</div>
+            <div class="cardinality" style="left: 850px; top: 540px;">M</div>
+            
+            <!-- View (USER to BILL) -->
+            <div class="relationship" style="left: 990px; top: 320px;">
+                <div class="relationship-text">View</div>
+            </div>
+            <div class="cardinality" style="left: 1050px; top: 120px;">1</div>
+            <div class="cardinality" style="left: 1050px; top: 540px;">M</div>
+            
+            <!-- Add (ADMIN to PRODUCT) -->
+            <div class="relationship" style="left: 240px; top: 440px;">
+                <div class="relationship-text">Add</div>
+            </div>
+            <div class="cardinality" style="left: 150px; top: 360px;">1</div>
+            <div class="cardinality" style="left: 400px; top: 560px;">M</div>
+            
+            <!-- Add (USER to CART) -->
+            <div class="relationship" style="left: 440px; top: 320px;">
+                <div class="relationship-text">Add</div>
+            </div>
+            <div class="cardinality" style="left: 700px; top: 120px;">1</div>
+            <div class="cardinality" style="left: 150px; top: 760px;">M</div>
+            
+            <!-- Contains (CART to PRODUCT) -->
+            <div class="relationship" style="left: 240px; top: 690px;">
+                <div class="relationship-text">Contains</div>
+            </div>
+            <div class="cardinality" style="left: 200px; top: 820px;">M</div>
+            <div class="cardinality" style="left: 360px; top: 650px;">M</div>
+            
+            <!-- Contains (ORDER to ORDER_ITEMS) -->
+            <div class="relationship" style="left: 690px; top: 740px;">
+                <div class="relationship-text">Contains</div>
+            </div>
+            <div class="cardinality" style="left: 850px; top: 660px;">1</div>
+            <div class="cardinality" style="left: 650px; top: 860px;">M</div>
+            
+            <!-- Includes (ORDER_ITEMS to PRODUCT) -->
+            <div class="relationship" style="left: 490px; top: 740px;">
+                <div class="relationship-text">Includes</div>
+            </div>
+            <div class="cardinality" style="left: 560px; top: 860px;">M</div>
+            <div class="cardinality" style="left: 450px; top: 660px;">M</div>
+            
+            <!-- Generate (ORDER to BILL) -->
+            <div class="relationship" style="left: 990px; top: 590px;">
+                <div class="relationship-text">Generate</div>
+            </div>
+            <div class="cardinality" style="left: 920px; top: 630px;">1</div>
+            <div class="cardinality" style="left: 1060px; top: 630px;">1</div>
+            
+            <!-- Gives (USER to FEEDBACK) -->
+            <div class="relationship" style="left: 790px; top: 920px;">
+                <div class="relationship-text">Gives</div>
+            </div>
+            <div class="cardinality" style="left: 850px; top: 660px;">1</div>
+            <div class="cardinality" style="left: 850px; top: 1160px;">M</div>
+            
+            <!-- Has (ORDER to FEEDBACK) -->
+            <div class="relationship" style="left: 790px; top: 920px;">
+                <div class="relationship-text">Has</div>
+            </div>
+            <div class="cardinality" style="left: 850px; top: 660px;">1</div>
+            <div class="cardinality" style="left: 850px; top: 1160px;">1</div>
+            
+            <!-- Manages (ADMIN to FEEDBACK) -->
+            <div class="relationship" style="left: 440px; top: 920px;">
+                <div class="relationship-text">Manages</div>
+            </div>
+            <div class="cardinality" style="left: 150px; top: 360px;">1</div>
+            <div class="cardinality" style="left: 750px; top: 1240px;">M</div>
+            
+            <!-- Manages (ADMIN to STOCK) -->
+            <div class="relationship" style="left: 240px; top: 920px;">
+                <div class="relationship-text">Manages</div>
+            </div>
+            <div class="cardinality" style="left: 150px; top: 360px;">1</div>
+            <div class="cardinality" style="left: 400px; top: 1160px;">M</div>
+            
+            <!-- Has (PRODUCT to STOCK) -->
+            <div class="relationship" style="left: 390px; top: 920px;">
+                <div class="relationship-text">Has</div>
+            </div>
+            <div class="cardinality" style="left: 450px; top: 660px;">1</div>
+            <div class="cardinality" style="left: 450px; top: 1160px;">1</div>
+            
+            <!-- Has (PRODUCT to PRODUCT_IMAGES) -->
+            <div class="relationship" style="left: 240px; top: 590px;">
+                <div class="relationship-text">Has</div>
+            </div>
+            <div class="cardinality" style="left: 360px; top: 630px;">1</div>
+            <div class="cardinality" style="left: 200px; top: 630px;">M</div>
+            
+            <!-- SVG Lines -->
+            <svg>
+                <!-- USER to ORDER -->
+                <line x1="850" y1="100" x2="850" y2="350" stroke="#000" stroke-width="2"/>
+                <line x1="850" y1="410" x2="850" y2="590" stroke="#000" stroke-width="2"/>
+                
+                <!-- USER to BILL -->
+                <line x1="900" y1="100" x2="1050" y2="350" stroke="#000" stroke-width="2"/>
+                <line x1="1050" y1="410" x2="1150" y2="590" stroke="#000" stroke-width="2"/>
+                
+                <!-- ADMIN to PRODUCT -->
+                <line x1="150" y1="330" x2="280" y2="470" stroke="#000" stroke-width="2"/>
+                <line x1="340" y1="530" x2="450" y2="590" stroke="#000" stroke-width="2"/>
+                
+                <!-- USER to CART -->
+                <line x1="750" y1="100" x2="480" y2="350" stroke="#000" stroke-width="2"/>
+                <line x1="480" y1="410" x2="150" y2="790" stroke="#000" stroke-width="2"/>
+                
+                <!-- CART to PRODUCT -->
+                <line x1="200" y1="820" x2="280" y2="720" stroke="#000" stroke-width="2"/>
+                <line x1="340" y1="660" x2="400" y2="630" stroke="#000" stroke-width="2"/>
+                
+                <!-- ORDER to ORDER_ITEMS -->
+                <line x1="850" y1="630" x2="730" y2="770" stroke="#000" stroke-width="2"/>
+                <line x1="670" y1="830" x2="650" y2="890" stroke="#000" stroke-width="2"/>
+                
+                <!-- ORDER_ITEMS to PRODUCT -->
+                <line x1="600" y1="890" x2="530" y2="770" stroke="#000" stroke-width="2"/>
+                <line x1="470" y1="710" x2="450" y2="630" stroke="#000" stroke-width="2"/>
+                
+                <!-- ORDER to BILL -->
+                <line x1="920" y1="620" x2="1030" y2="620" stroke="#000" stroke-width="2"/>
+                <line x1="1090" y1="620" x2="1100" y2="620" stroke="#000" stroke-width="2"/>
+                
+                <!-- USER to FEEDBACK -->
+                <line x1="850" y1="100" x2="850" y2="950" stroke="#000" stroke-width="2"/>
+                <line x1="850" y1="1010" x2="850" y2="1190" stroke="#000" stroke-width="2"/>
+                
+                <!-- ADMIN to FEEDBACK -->
+                <line x1="150" y1="330" x2="480" y2="950" stroke="#000" stroke-width="2"/>
+                <line x1="480" y1="1010" x2="750" y2="1230" stroke="#000" stroke-width="2"/>
+                
+                <!-- ADMIN to STOCK -->
+                <line x1="150" y1="330" x2="280" y2="950" stroke="#000" stroke-width="2"/>
+                <line x1="280" y1="1010" x2="400" y2="1190" stroke="#000" stroke-width="2"/>
+                
+                <!-- PRODUCT to STOCK -->
+                <line x1="450" y1="630" x2="430" y2="950" stroke="#000" stroke-width="2"/>
+                <line x1="430" y1="1010" x2="450" y2="1190" stroke="#000" stroke-width="2"/>
+                
+                <!-- PRODUCT to PRODUCT_IMAGES -->
+                <line x1="400" y1="620" x2="280" y2="620" stroke="#000" stroke-width="2"/>
+                <line x1="220" y1="620" x2="200" y2="620" stroke="#000" stroke-width="2"/>
+            </svg>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+            <h3>Legend:</h3>
+            <p><strong>Rectangle:</strong> Entity</p>
+            <p><strong>Oval:</strong> Attribute</p>
+            <p><strong>Underlined Oval:</strong> Primary Key</p>
+            <p><strong>Diamond:</strong> Relationship</p>
+            <p><strong>1:</strong> One</p>
+            <p><strong>M:</strong> Many</p>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+            <h3>Entities (11 Tables):</h3>
+            <p>USER, ADMIN, PRODUCT, PRODUCT_IMAGES, CART, ORDER, ORDER_ITEMS, BILL, FEEDBACK, STOCK, PASSWORD_RESETS</p>
+        </div>
+    </div>
+</body>
+</html>

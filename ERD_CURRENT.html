@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERD - Bhosale Opticians E-Commerce System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #333;
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 2.2em;
+        }
+        
+        .erd-diagram {
+            position: relative;
+            min-height: 900px;
+            background: #fafafa;
+            border: 2px solid #ddd;
+            padding: 40px;
+            margin: 20px 0;
+        }
+        
+        .entity {
+            position: absolute;
+            background: white;
+            border: 3px solid #333;
+            border-radius: 8px;
+            min-width: 250px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .entity-header {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .entity-body {
+            padding: 0;
+        }
+        
+        .field {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+        }
+        
+        .field:last-child {
+            border-bottom: none;
+        }
+        
+        .pk {
+            background: #fff3cd;
+            font-weight: bold;
+        }
+        
+        .fk {
+            background: #d1ecf1;
+            font-style: italic;
+        }
+        
+        .field-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .field-type {
+            color: #666;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .entity {
+            z-index: 1;
+        }
+        
+        .relationship-label {
+            position: absolute;
+            background: white;
+            padding: 2px 8px;
+            border: 1px solid #666;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .legend h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .legend-item {
+            display: inline-block;
+            margin-right: 30px;
+            margin-bottom: 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        
+        .legend-pk { background: #fff3cd; font-weight: bold; }
+        .legend-fk { background: #d1ecf1; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ENTITY RELATIONSHIP DIAGRAM (ERD)</h1>
+            <p><strong>Bhosale Opticians E-Commerce System</strong></p>
+            <p>Database: sunray_db | Current Implementation | March 10, 2026</p>
+        </div>
+        
+        <div class="erd-diagram">
+            <!-- USERS Entity -->
+            <div class="entity" style="left: 50px; top: 50px;">
+                <div class="entity-header">USERS</div>
+                <div class="entity-body">
+                    <div class="field pk">
+                        <span class="field-name">🔑 id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">name</span>
+                        <span class="field-type">VARCHAR(100)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">email</span>
+                        <span class="field-type">VARCHAR(100) UNIQUE</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">password</span>
+                        <span class="field-type">VARCHAR(255)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">phone</span>
+                        <span class="field-type">VARCHAR(15)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">role</span>
+                        <span class="field-type">ENUM('user','admin')</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">created_at</span>
+                        <span class="field-type">TIMESTAMP</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PRODUCTS Entity -->
+            <div class="entity" style="right: 50px; top: 50px;">
+                <div class="entity-header">PRODUCTS</div>
+                <div class="entity-body">
+                    <div class="field pk">
+                        <span class="field-name">🔑 id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">name</span>
+                        <span class="field-type">VARCHAR(100)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">description</span>
+                        <span class="field-type">TEXT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">price</span>
+                        <span class="field-type">DECIMAL(10,2)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">category</span>
+                        <span class="field-type">VARCHAR(50)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">gender</span>
+                        <span class="field-type">VARCHAR(20)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">image_url</span>
+                        <span class="field-type">VARCHAR(255)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">on_sale</span>
+                        <span class="field-type">BOOLEAN</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">stock</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">badge</span>
+                        <span class="field-type">VARCHAR(50)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">created_at</span>
+                        <span class="field-type">TIMESTAMP</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ORDERS Entity -->
+            <div class="entity" style="left: 50px; top: 380px;">
+                <div class="entity-header">ORDERS</div>
+                <div class="entity-body">
+                    <div class="field pk">
+                        <span class="field-name">🔑 id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field fk">
+                        <span class="field-name">🔗 user_id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">total_amount</span>
+                        <span class="field-type">DECIMAL(10,2)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">status</span>
+                        <span class="field-type">VARCHAR(50)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">shipping_address</span>
+                        <span class="field-type">TEXT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">payment_id</span>
+                        <span class="field-type">VARCHAR(255)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">created_at</span>
+                        <span class="field-type">TIMESTAMP</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ORDER_ITEMS Entity -->
+            <div class="entity" style="right: 50px; top: 450px;">
+                <div class="entity-header">ORDER_ITEMS</div>
+                <div class="entity-body">
+                    <div class="field pk">
+                        <span class="field-name">🔑 id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field fk">
+                        <span class="field-name">🔗 order_id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field fk">
+                        <span class="field-name">🔗 product_id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">quantity</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">price</span>
+                        <span class="field-type">DECIMAL(10,2)</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FEEDBACK Entity -->
+            <div class="entity" style="left: 450px; top: 380px;">
+                <div class="entity-header">FEEDBACK</div>
+                <div class="entity-body">
+                    <div class="field pk">
+                        <span class="field-name">🔑 id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field fk">
+                        <span class="field-name">🔗 user_id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field fk">
+                        <span class="field-name">🔗 order_id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">rating</span>
+                        <span class="field-type">INT (1-5)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">feedback_text</span>
+                        <span class="field-type">TEXT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">created_at</span>
+                        <span class="field-type">TIMESTAMP</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PASSWORD_RESETS Entity -->
+            <div class="entity" style="left: 450px; top: 50px;">
+                <div class="entity-header">PASSWORD_RESETS</div>
+                <div class="entity-body">
+                    <div class="field pk">
+                        <span class="field-name">🔑 id</span>
+                        <span class="field-type">INT</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">email</span>
+                        <span class="field-type">VARCHAR(100)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">token</span>
+                        <span class="field-type">VARCHAR(255)</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">created_at</span>
+                        <span class="field-type">TIMESTAMP</span>
+                    </div>
+                    <div class="field">
+                        <span class="field-name">expires_at</span>
+                        <span class="field-type">TIMESTAMP</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SVG for Relationships -->
+            <svg>
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#333" />
+                    </marker>
+                </defs>
+                
+                <!-- USERS to ORDERS (1:N) -->
+                <line x1="175" y1="280" x2="175" y2="380" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                
+                <!-- ORDERS to ORDER_ITEMS (1:N) -->
+                <line x1="310" y1="520" x2="1050" y2="520" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                
+                <!-- PRODUCTS to ORDER_ITEMS (1:N) -->
+                <line x1="1175" y1="380" x2="1175" y2="450" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                
+                <!-- USERS to FEEDBACK (1:N) -->
+                <line x1="310" y1="200" x2="575" y2="380" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                
+                <!-- ORDERS to FEEDBACK (1:N) -->
+                <line x1="310" y1="480" x2="575" y2="480" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+            </svg>
+            
+            <!-- Relationship Labels -->
+            <div class="relationship-label" style="left: 180px; top: 330px;">1:N<br>places</div>
+            <div class="relationship-label" style="left: 650px; top: 505px;">1:N<br>contains</div>
+            <div class="relationship-label" style="left: 1180px; top: 410px;">1:N<br>includes</div>
+            <div class="relationship-label" style="left: 400px; top: 280px;">1:N<br>gives</div>
+            <div class="relationship-label" style="left: 420px; top: 465px;">1:1<br>has</div>
+        </div>
+        
+        <div class="legend">
+            <h3>Legend:</h3>
+            <div class="legend-item legend-pk">🔑 Primary Key (PK)</div>
+            <div class="legend-item legend-fk">🔗 Foreign Key (FK)</div>
+        </div>
+        
+        <div class="legend" style="margin-top: 20px;">
+            <h3>Database Relationships:</h3>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li><strong>USERS → ORDERS:</strong> One-to-Many (One user can place multiple orders)</li>
+                <li><strong>ORDERS → ORDER_ITEMS:</strong> One-to-Many (One order can have multiple items)</li>
+                <li><strong>PRODUCTS → ORDER_ITEMS:</strong> One-to-Many (One product can be in multiple orders)</li>
+                <li><strong>USERS → FEEDBACK:</strong> One-to-Many (One user can give multiple feedback)</li>
+                <li><strong>ORDERS → FEEDBACK:</strong> One-to-One (Each order can have one feedback)</li>
+                <li><strong>PASSWORD_RESETS:</strong> Independent table for password reset tokens</li>
+            </ul>
+        </div>
+        
+        <div class="legend" style="margin-top: 20px;">
+            <h3>Table Descriptions:</h3>
+            <ul style="list-style-type: disc; padding-left: 20px;">
+                <li><strong>USERS:</strong> Stores customer and admin information with role-based access</li>
+                <li><strong>PRODUCTS:</strong> Product catalog with eyeglasses and sunglasses details</li>
+                <li><strong>ORDERS:</strong> Customer orders with status tracking and payment information</li>
+                <li><strong>ORDER_ITEMS:</strong> Individual products within each order with quantity and price</li>
+                <li><strong>FEEDBACK:</strong> Customer feedback and ratings for completed orders</li>
+                <li><strong>PASSWORD_RESETS:</strong> Temporary tokens for password reset functionality</li>
+            </ul>
+        </div>
+        
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #333; text-align: center; color: #666;">
+            <p><strong>Bhosale Opticians E-Commerce System</strong></p>
+            <p>ERD Version 1.0 | Generated on March 10, 2026</p>
+            <p>Contact: bhosaleopticians@gmail.com | Phone: 9960815363</p>
+        </div>
+    </div>
+</body>
+</html>

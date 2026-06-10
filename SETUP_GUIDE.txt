@@ -1,0 +1,79 @@
+========================================
+SUNRAY - QUICK SETUP GUIDE
+========================================
+
+Follow these simple steps to run your website:
+
+STEP 1: START XAMPP
+-------------------
+1. Open XAMPP Control Panel
+2. Click "Start" next to Apache
+3. Click "Start" next to MySQL
+4. Both should show green "Running" status
+
+STEP 2: CREATE DATABASE
+-----------------------
+1. Open browser
+2. Go to: http://localhost/phpmyadmin
+3. Click "New" on the left sidebar
+4. Database name: sunray_db
+5. Click "Create"
+6. Click "Import" tab at the top
+7. Click "Choose File" and select "database.sql"
+8. Click "Go" at the bottom
+9. You should see "Import has been successfully finished"
+
+STEP 3: COPY FILES
+------------------
+1. Copy ALL project files to: C:\xampp\htdocs\sunray\
+   (Create the "sunray" folder if it doesn't exist)
+
+Files to copy:
+- index.php
+- products.php
+- cart.php
+- login.php
+- register.php
+- config.php
+- style.css
+- script.js
+- database.sql
+- README.md
+
+STEP 4: OPEN WEBSITE
+--------------------
+1. Open your browser
+2. Go to: http://localhost/sunray/
+3. You should see the beautiful SUNRAY homepage!
+
+DEMO LOGIN
+----------
+Email: john@example.com
+Password: password123
+
+TROUBLESHOOTING
+---------------
+Problem: "Connection failed"
+Solution: Make sure MySQL is running in XAMPP
+
+Problem: "Database not found"
+Solution: Import database.sql in phpMyAdmin
+
+Problem: Page not found
+Solution: Check files are in C:\xampp\htdocs\sunray\
+
+Problem: No products showing
+Solution: Make sure database.sql was imported successfully
+
+FEATURES TO TRY
+---------------
+✓ Browse products on homepage
+✓ Click "Products" to see all items
+✓ Filter by category (Sunglasses/Eyeglasses)
+✓ Add items to cart
+✓ View cart
+✓ Register new account
+✓ Login with demo account
+
+ENJOY YOUR WEBSITE! 🕶️
+========================================

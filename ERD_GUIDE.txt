@@ -1,0 +1,378 @@
+ENTITY RELATIONSHIP DIAGRAM (ERD) - CHEN NOTATION
+Bhosale Opticians E-Commerce System
+====================================================
+
+RECOMMENDED TOOLS TO CREATE ERD:
+1. Draw.io (https://app.diagrams.net/) - Free online tool
+2. Lucidchart (https://www.lucidchart.com/)
+3. Microsoft Visio
+4. MySQL Workbench (Auto-generate from database)
+5. dbdiagram.io (https://dbdiagram.io/)
+
+====================================================
+ERD STRUCTURE (Chen Notation Format)
+====================================================
+
+ENTITIES (Rectangles):
+1. USER
+2. ADMIN
+3. PRODUCT
+4. PRODUCT_IMAGES
+5. CART
+6. ORDER
+7. ORDER_ITEMS
+8. BILL
+9. FEEDBACK
+10. STOCK
+11. PASSWORD_RESETS
+
+====================================================
+RELATIONSHIPS (Diamonds) WITH CARDINALITY:
+====================================================
+
+1. USER ----1---- [Placing Order] ----M---- ORDER
+   (One user can place many orders)
+
+2. USER ----1---- [View] ----M---- BILL
+   (One user can view many bills)
+
+3. USER ----1---- [Add] ----M---- CART
+   (One user can have many cart items)
+
+4. USER ----1---- [Gives] ----M---- FEEDBACK
+   (One user can give many feedback)
+
+5. ADMIN ----1---- [Add] ----M---- PRODUCT
+   (One admin can add many products)
+
+6. ADMIN ----1---- [Manages] ----M---- STOCK
+   (One admin can manage many stock records)
+
+7. ADMIN ----1---- [Responds] ----M---- FEEDBACK
+   (One admin can respond to many feedback)
+
+8. PRODUCT ----1---- [Has] ----M---- PRODUCT_IMAGES
+   (One product can have many images)
+
+9. PRODUCT ----1---- [Has] ----1---- STOCK
+   (One product has one stock record)
+
+10. PRODUCT ----M---- [Contains] ----M---- CART
+    (Many products can be in many carts)
+
+11. PRODUCT ----M---- [Includes] ----M---- ORDER_ITEMS
+    (Many products can be in many order items)
+
+12. ORDER ----1---- [Contains] ----M---- ORDER_ITEMS
+    (One order contains many items)
+
+13. ORDER ----1---- [Generates] ----1---- BILL
+    (One order generates one bill)
+
+14. ORDER ----1---- [Has] ----1---- FEEDBACK
+    (One order can have one feedback)
+
+====================================================
+ATTRIBUTES (Ovals) - PRIMARY KEYS UNDERLINED:
+====================================================
+
+USER:
+- user_id (PK)
+- username
+- email
+- password
+- phone
+- address
+- city
+- state
+- pincode
+- status
+- created_at
+- updated_at
+
+ADMIN:
+- admin_id (PK)
+- username
+- email
+- password
+- phone
+- role
+- status
+- last_login
+- created_at
+- updated_at
+
+PRODUCT:
+- product_id (PK)
+- product_name
+- gender
+- description
+- image
+- category
+- discount_percent
+- brand
+- frame_material
+- model
+- badge
+- lens_type
+- created_at
+- updated_at
+
+PRODUCT_IMAGES:
+- id (PK)
+- product_id (FK)
+- image_url
+- alt_text
+- is_primary
+- sort_order
+- created_at
+
+CART:
+- cart_id (PK)
+- user_id (FK)
+- product_id (FK)
+- quantity
+- added_at
+- updated_at
+
+ORDER:
+- id (PK)
+- order_number
+- user_id (FK)
+- total_amount
+- tax_amount
+- discount_amount
+- final_amount
+- status
+- payment_method
+- payment_status
+- payment_id
+- shipping_address
+- billing_address
+- notes
+- created_at
+- updated_at
+
+ORDER_ITEMS:
+- id (PK)
+- order_id (FK)
+- product_id (FK)
+- product_name
+- quantity
+- unit_price
+- total_price
+- discount_percent
+- discount_amount
+- created_at
+
+BILL:
+- bill_id (PK)
+- order_id (FK)
+- bill_number
+- bill_date
+- total_amount
+- tax_amount
+- subtotal
+- discount_amount
+- status
+- created_at
+
+FEEDBACK:
+- id (PK)
+- user_id (FK)
+- order_id (FK)
+- product_id (FK)
+- rating
+- feedback_text
+- feedback_type
+- status
+- admin_response
+- responded_by (FK)
+- responded_at
+- created_at
+
+STOCK:
+- id (PK)
+- product_id (FK)
+- quantity
+- reorder_level
+- updated_by (FK)
+- last_updated
+
+PASSWORD_RESETS:
+- id (PK)
+- email
+- token
+- user_type
+- created_at
+- expires_at
+- used_at
+
+====================================================
+HOW TO CREATE ERD USING DRAW.IO:
+====================================================
+
+1. Go to https://app.diagrams.net/
+2. Create new diagram
+3. Use shapes:
+   - Rectangle for Entities
+   - Oval for Attributes
+   - Diamond for Relationships
+4. Add cardinality labels (1, M) on relationship lines
+5. Underline primary key attributes
+6. Connect entities through relationship diamonds
+7. Export as PNG or PDF
+
+====================================================
+ALTERNATIVE: Use dbdiagram.io
+====================================================
+
+Visit: https://dbdiagram.io/
+Paste this code:
+
+Table users {
+  user_id int [pk]
+  username varchar
+  email varchar
+  password varchar
+  phone varchar
+  address varchar
+  city varchar
+  state varchar
+  pincode varchar
+  status enum
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table admin {
+  admin_id int [pk]
+  username varchar
+  email varchar
+  password varchar
+  phone varchar
+  role enum
+  status enum
+  last_login timestamp
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table products {
+  product_id int [pk]
+  product_name varchar
+  gender varchar
+  description varchar
+  image varchar
+  category varchar
+  discount_percent int
+  brand varchar
+  frame_material varchar
+  model varchar
+  badge varchar
+  lens_type varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table product_images {
+  id int [pk]
+  product_id int [ref: > products.product_id]
+  image_url varchar
+  alt_text varchar
+  is_primary boolean
+  sort_order int
+  created_at timestamp
+}
+
+Table cart {
+  cart_id int [pk]
+  user_id int [ref: > users.user_id]
+  product_id int [ref: > products.product_id]
+  quantity int
+  added_at timestamp
+  updated_at timestamp
+}
+
+Table orders {
+  id int [pk]
+  order_number varchar
+  user_id int [ref: > users.user_id]
+  total_amount decimal
+  tax_amount decimal
+  discount_amount decimal
+  final_amount decimal
+  status enum
+  payment_method enum
+  payment_status enum
+  payment_id varchar
+  shipping_address text
+  billing_address text
+  notes text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table order_items {
+  id int [pk]
+  order_id int [ref: > orders.id]
+  product_id int [ref: > products.product_id]
+  product_name varchar
+  quantity int
+  unit_price decimal
+  total_price decimal
+  discount_percent int
+  discount_amount decimal
+  created_at timestamp
+}
+
+Table bill {
+  bill_id int [pk]
+  order_id int [ref: - orders.id]
+  bill_number varchar
+  bill_date timestamp
+  total_amount decimal
+  tax_amount decimal
+  subtotal decimal
+  discount_amount decimal
+  status enum
+  created_at timestamp
+}
+
+Table feedback {
+  id int [pk]
+  user_id int [ref: > users.user_id]
+  order_id int [ref: > orders.id]
+  product_id int [ref: > products.product_id]
+  rating int
+  feedback_text text
+  feedback_type enum
+  status enum
+  admin_response text
+  responded_by int [ref: > admin.admin_id]
+  responded_at timestamp
+  created_at timestamp
+}
+
+Table stock {
+  id int [pk]
+  product_id int [ref: - products.product_id]
+  quantity int
+  reorder_level int
+  updated_by int [ref: > admin.admin_id]
+  last_updated timestamp
+}
+
+Table password_resets {
+  id int [pk]
+  email varchar
+  token varchar
+  user_type enum
+  created_at timestamp
+  expires_at timestamp
+  used_at timestamp
+}
+
+====================================================
+This will auto-generate a professional ERD diagram!
+====================================================

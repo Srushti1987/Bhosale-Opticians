@@ -1,0 +1,172 @@
+========================================
+SUNRAY - ADMIN & USER SYSTEM GUIDE
+========================================
+
+FEATURES IMPLEMENTED:
+--------------------
+✓ Separate Admin and User Dashboards
+✓ Role-based Login (Admin/User)
+✓ User Registration
+✓ Forgot Password Functionality
+✓ Password Reset with Token
+✓ Profile Management
+✓ Admin Product Management
+✓ Secure Password Hashing
+
+DEMO ACCOUNTS:
+--------------
+USER ACCOUNT:
+Email: john@example.com
+Password: password123
+Access: User Dashboard, Shopping, Orders
+
+ADMIN ACCOUNT:
+Email: admin@sunray.com
+Password: password123
+Access: Admin Dashboard, Product Management, Order Management, User Management
+
+FILE STRUCTURE:
+---------------
+Root Files:
+- login.php (Login for both admin and user)
+- register.php (User registration)
+- forgot-password.php (Request password reset)
+- reset-password.php (Reset password with token)
+- logout.php (Logout functionality)
+
+User Dashboard:
+- user/dashboard.php (User dashboard with stats)
+- user/profile.php (Update profile & change password)
+- user/orders.php (View order history)
+
+Admin Dashboard:
+- admin/dashboard.php (Admin dashboard with statistics)
+- admin/products.php (Manage products - Add/Edit/Delete)
+- admin/orders.php (Manage orders)
+- admin/users.php (Manage users)
+
+HOW IT WORKS:
+-------------
+
+1. REGISTRATION:
+   - Users register at register.php
+   - Password is hashed using PHP password_hash()
+   - Default role is 'user'
+   - Admin accounts must be created manually in database
+
+2. LOGIN:
+   - Both admin and user login at login.php
+   - System checks role and redirects:
+     * Admin → admin/dashboard.php
+     * User → user/dashboard.php
+
+3. FORGOT PASSWORD:
+   - User enters email at forgot-password.php
+   - System generates unique token
+   - Token expires in 1 hour
+   - Reset link is displayed (in production, send via email)
+   - User clicks link to reset-password.php?token=xxx
+   - User enters new password
+   - Token is deleted after successful reset
+
+4. ADMIN FEATURES:
+   - View statistics (products, orders, users, revenue)
+   - Add new products with image URL
+   - Edit existing products
+   - Delete products
+   - View all orders
+   - Manage users
+   - Update order status
+
+5. USER FEATURES:
+   - View personal dashboard
+   - See order history
+   - Update profile information
+   - Change password
+   - Shop products
+   - Add to cart
+   - Place orders
+
+SECURITY FEATURES:
+------------------
+✓ Password hashing with bcrypt
+✓ SQL injection prevention (real_escape_string)
+✓ Session-based authentication
+✓ Role-based access control
+✓ Password reset token expiration
+✓ CSRF protection ready
+
+DATABASE TABLES:
+----------------
+1. users
+   - id, name, email, password, role, created_at
+   - role: 'user' or 'admin'
+
+2. password_resets
+   - id, email, token, created_at, expires_at
+   - Stores temporary reset tokens
+
+3. products
+   - id, name, description, price, category, image_url, on_sale, stock
+
+4. orders
+   - id, user_id, total_amount, status, shipping_address, created_at
+
+5. order_items
+   - id, order_id, product_id, quantity, price
+
+SETUP INSTRUCTIONS:
+-------------------
+1. Import database.sql in phpMyAdmin
+2. Make sure all files are in correct folders:
+   - Root: login.php, register.php, forgot-password.php, etc.
+   - user/ folder: dashboard.php, profile.php
+   - admin/ folder: dashboard.php, products.php
+3. Access: http://localhost/sunray/login.php
+
+TESTING THE SYSTEM:
+-------------------
+
+Test User Flow:
+1. Go to register.php
+2. Create new account
+3. Login → redirects to user/dashboard.php
+4. View profile, update information
+5. Test forgot password flow
+
+Test Admin Flow:
+1. Login with admin@sunray.com
+2. Redirects to admin/dashboard.php
+3. Go to Products → Add new product
+4. Edit existing product
+5. Delete product
+6. View orders and users
+
+Test Forgot Password:
+1. Go to forgot-password.php
+2. Enter: john@example.com
+3. Click the reset link shown
+4. Enter new password
+5. Login with new password
+
+CUSTOMIZATION:
+--------------
+- Change colors in style.css
+- Modify email sending in forgot-password.php
+- Add more admin features in admin/ folder
+- Add more user features in user/ folder
+- Customize dashboard statistics
+
+PRODUCTION NOTES:
+-----------------
+For production deployment:
+1. Enable email sending in forgot-password.php
+2. Use prepared statements instead of real_escape_string
+3. Add CSRF tokens to forms
+4. Enable HTTPS
+5. Set secure session cookies
+6. Add rate limiting for login attempts
+7. Add email verification for registration
+
+ENJOY YOUR COMPLETE ADMIN & USER SYSTEM! 🎉
+========================================

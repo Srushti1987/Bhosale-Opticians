@@ -1,0 +1,372 @@
+================================================================================
+ENTITIES OF ERD - BHOSALE OPTICIANS E-COMMERCE SYSTEM
+================================================================================
+
+DATABASE: sunray_db
+TOTAL ENTITIES: 11
+DATE: March 10, 2026
+
+================================================================================
+ALL 11 ENTITIES (TABLES)
+================================================================================
+
+1. USERS
+   Primary Key: user_id (INT)
+   Purpose: Stores customer/user account information
+   Attributes:
+   - user_id (PK)
+   - username
+   - email
+   - password
+   - address
+   - phone
+   - city
+   - state
+   - pincode
+   - status
+   - created_at
+   - updated_at
+
+2. ADMIN
+   Primary Key: admin_id (INT)
+   Purpose: Stores administrator account information (separate from users)
+   Attributes:
+   - admin_id (PK)
+   - username
+   - email
+   - password
+   - phone
+   - role
+   - status
+   - last_login
+   - created_at
+   - updated_at
+
+3. PRODUCTS
+   Primary Key: product_id (INT)
+   Purpose: Stores eyeglasses and sunglasses product catalog
+   Attributes:
+   - product_id (PK)
+   - product_name
+   - gender
+   - description
+   - image
+   - category
+   - discount_percent
+   - brand
+   - frame_material
+   - model
+   - badge
+   - lens_type
+   - created_at
+   - updated_at
+
+4. PRODUCT_IMAGES
+   Primary Key: id (INT)
+   Foreign Key: product_id → PRODUCTS
+   Purpose: Stores multiple images for each product
+   Attributes:
+   - id (PK)
+   - product_id (FK)
+   - image_url
+   - alt_text
+   - is_primary
+   - sort_order
+   - created_at
+
+5. CART
+   Primary Key: cart_id (INT)
+   Foreign Keys: user_id → USERS, product_id → PRODUCTS
+   Purpose: Stores shopping cart items for logged-in users
+   Attributes:
+   - cart_id (PK)
+   - user_id (FK)
+   - product_id (FK)
+   - quantity
+   - added_at
+   - updated_at
+
+6. ORDERS
+   Primary Key: id (INT)
+   Foreign Key: user_id → USERS
+   Purpose: Stores customer order information
+   Attributes:
+   - id (PK)
+   - order_number
+   - user_id (FK)
+   - total_amount
+   - tax_amount
+   - discount_amount
+   - final_amount
+   - status
+   - payment_method
+   - payment_status
+   - payment_id
+   - billing_address
+   - shipping_address
+   - notes
+   - created_at
+   - updated_at
+
+7. ORDER_ITEMS
+   Primary Key: id (INT)
+   Foreign Keys: order_id → ORDERS, product_id → PRODUCTS
+   Purpose: Stores individual line items within each order
+   Attributes:
+   - id (PK)
+   - order_id (FK)
+   - product_id (FK)
+   - product_name
+   - quantity
+   - unit_price
+   - total_price
+   - discount_percent
+   - discount_amount
+   - created_at
+
+8. BILL
+   Primary Key: bill_id (INT)
+   Foreign Key: order_id → ORDERS
+   Purpose: Stores invoice/bill information for each order
+   Attributes:
+   - bill_id (PK)
+   - order_id (FK)
+   - bill_number
+   - bill_date
+   - subtotal
+   - tax_amount
+   - total_amount
+   - created_at
+
+9. FEEDBACK
+   Primary Key: id (INT)
+   Foreign Keys: user_id → USERS, order_id → ORDERS, product_id → PRODUCTS, responded_by → ADMIN
+   Purpose: Stores customer feedback and ratings with admin responses
+   Attributes:
+   - id (PK)
+   - user_id (FK)
+   - order_id (FK)
+   - product_id (FK)
+   - rating
+   - feedback_text
+   - feedback_type
+   - status
+   - admin_response
+   - responded_by (FK)
+   - responded_at
+   - created_at
+
+10. STOCK
+    Primary Key: id (INT)
+    Foreign Keys: product_id → PRODUCTS, updated_by → ADMIN
+    Purpose: Stores inventory/stock information for products
+    Attributes:
+    - id (PK)
+    - product_id (FK)
+    - quantity
+    - reorder_level
+    - updated_by (FK)
+    - last_updated
+
+11. PASSWORD_RESETS
+    Primary Key: id (INT)
+    Purpose: Stores password reset tokens for users and admins
+    Attributes:
+    - id (PK)
+    - email
+    - token
+    - user_type
+    - created_at
+    - expires_at
+    - used_at
+
+
+================================================================================
+ENTITY CLASSIFICATION
+================================================================================
+
+CORE ENTITIES (Main Business Objects):
+---------------------------------------
+1. USERS - Customer accounts
+2. ADMIN - Administrator accounts
+3. PRODUCTS - Product catalog
+
+TRANSACTION ENTITIES (Business Transactions):
+----------------------------------------------
+4. CART - Shopping cart
+5. ORDERS - Customer orders
+6. ORDER_ITEMS - Order line items
+7. BILL - Invoices/Bills
+
+SUPPORTING ENTITIES (Additional Information):
+----------------------------------------------
+8. PRODUCT_IMAGES - Product photos
+9. FEEDBACK - Customer reviews
+10. STOCK - Inventory management
+11. PASSWORD_RESETS - Security tokens
+
+
+================================================================================
+ENTITY RELATIONSHIPS SUMMARY
+================================================================================
+
+STRONG ENTITIES (Independent):
+-------------------------------
+- USERS (can exist independently)
+- ADMIN (can exist independently)
+- PRODUCTS (can exist independently)
+- PASSWORD_RESETS (can exist independently)
+
+WEAK ENTITIES (Dependent on other entities):
+---------------------------------------------
+- CART (depends on USERS and PRODUCTS)
+- ORDERS (depends on USERS)
+- ORDER_ITEMS (depends on ORDERS and PRODUCTS)
+- BILL (depends on ORDERS)
+- FEEDBACK (depends on USERS, ORDERS, PRODUCTS)
+- STOCK (depends on PRODUCTS)
+- PRODUCT_IMAGES (depends on PRODUCTS)
+
+
+================================================================================
+ENTITY CARDINALITY
+================================================================================
+
+ONE-TO-MANY (1:N) RELATIONSHIPS:
+---------------------------------
+1. USERS → CART (One user has many cart items)
+2. USERS → ORDERS (One user places many orders)
+3. USERS → FEEDBACK (One user gives many feedback)
+4. ADMIN → STOCK (One admin updates many stock records)
+5. ADMIN → FEEDBACK (One admin responds to many feedback)
+6. PRODUCTS → PRODUCT_IMAGES (One product has many images)
+7. PRODUCTS → CART (One product in many carts)
+8. PRODUCTS → ORDER_ITEMS (One product in many orders)
+9. PRODUCTS → FEEDBACK (One product has many feedback)
+10. ORDERS → ORDER_ITEMS (One order has many items)
+
+ONE-TO-ONE (1:1) RELATIONSHIPS:
+--------------------------------
+1. ORDERS → BILL (One order generates one bill)
+2. ORDERS → FEEDBACK (One order has one feedback)
+3. PRODUCTS → STOCK (One product has one stock record)
+
+
+================================================================================
+PRIMARY KEYS OF ALL ENTITIES
+================================================================================
+
+1. USERS.user_id
+2. ADMIN.admin_id
+3. PRODUCTS.product_id
+4. PRODUCT_IMAGES.id
+5. CART.cart_id
+6. ORDERS.id
+7. ORDER_ITEMS.id
+8. BILL.bill_id
+9. FEEDBACK.id
+10. STOCK.id
+11. PASSWORD_RESETS.id
+
+
+================================================================================
+FOREIGN KEYS BY ENTITY
+================================================================================
+
+CART:
+- user_id → USERS(user_id)
+- product_id → PRODUCTS(product_id)
+
+ORDERS:
+- user_id → USERS(user_id)
+
+ORDER_ITEMS:
+- order_id → ORDERS(id)
+- product_id → PRODUCTS(product_id)
+
+BILL:
+- order_id → ORDERS(id)
+
+FEEDBACK:
+- user_id → USERS(user_id)
+- order_id → ORDERS(id)
+- product_id → PRODUCTS(product_id)
+- responded_by → ADMIN(admin_id)
+
+STOCK:
+- product_id → PRODUCTS(product_id)
+- updated_by → ADMIN(admin_id)
+
+PRODUCT_IMAGES:
+- product_id → PRODUCTS(product_id)
+
+
+================================================================================
+ENTITY PURPOSE & BUSINESS LOGIC
+================================================================================
+
+1. USERS
+   - Stores customer registration data
+   - Used for login authentication
+   - Links to orders, cart, and feedback
+
+2. ADMIN
+   - Separate admin accounts (not mixed with users)
+   - Role-based access control
+   - Tracks who updated stock and responded to feedback
+
+3. PRODUCTS
+   - Central product catalog
+   - Contains all eyeglasses and sunglasses
+   - Categories: Men, Women, Kids
+
+4. PRODUCT_IMAGES
+   - Multiple images per product
+   - Primary image designation
+   - Sort order for display
+
+5. CART
+   - Persistent shopping cart
+   - Stores items before checkout
+   - Quantity tracking
+
+6. ORDERS
+   - Master order record
+   - Payment and shipping details
+   - Order status tracking
+
+7. ORDER_ITEMS
+   - Individual products in order
+   - Quantity and pricing details
+   - Discount calculations
+
+8. BILL
+   - Invoice generation
+   - Tax calculations (18% GST)
+   - Subtotal and total amounts
+
+9. FEEDBACK
+   - Customer ratings (1-5 stars)
+   - Product and order feedback
+   - Admin response capability
+
+10. STOCK
+    - Inventory tracking
+    - Reorder level alerts (≤10)
+    - Admin update tracking
+
+11. PASSWORD_RESETS
+    - Secure password reset tokens
+    - 1-hour expiry
+    - Separate for users and admins
+
+
+================================================================================
+END OF ENTITIES LIST
+================================================================================
+
+Total Entities: 11
+Total Relationships: 13 (10 One-to-Many + 3 One-to-One)
+Total Foreign Keys: 12
+
+Contact: bhosaleopticians@gmail.com | Phone: 9960815363

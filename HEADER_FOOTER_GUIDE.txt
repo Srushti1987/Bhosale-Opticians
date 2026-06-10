@@ -1,0 +1,147 @@
+========================================
+HEADER & FOOTER IMPLEMENTATION GUIDE
+========================================
+
+NEW FEATURES ADDED:
+-------------------
+
+HEADER FEATURES:
+1. ✅ Top Bar with contact info and business hours
+2. ✅ User account dropdown (shows name when logged in)
+3. ✅ Dynamic cart badge (shows item count)
+4. ✅ Search modal with popular searches
+5. ✅ Active page highlighting
+6. ✅ Icons for all menu items
+7. ✅ Responsive mobile menu
+8. ✅ Admin/User dashboard links based on role
+
+FOOTER FEATURES:
+1. ✅ Social media links (Facebook, Instagram, Twitter, WhatsApp)
+2. ✅ Complete contact information with icons
+3. ✅ Quick links to all product categories
+4. ✅ Customer service links (opens modals)
+5. ✅ Privacy Policy modal
+6. ✅ Terms & Conditions modal
+7. ✅ Back to top button
+8. ✅ Dynamic copyright year
+
+HOW TO USE IN YOUR PAGES:
+--------------------------
+
+For ROOT LEVEL pages (index_updated.php, products.php, cart-session.php, etc.):
+
+<?php
+session_start();
+require_once 'config.php';
+
+// Set page variables
+$page_title = "Home - Bhosale Opticians";
+$active_page = "home"; // Options: home, products, cart
+$base_url = ""; // Empty for root level
+
+// Include header
+include 'includes/header.php';
+?>
+
+<!-- Your page content here -->
+
+<?php
+// Include footer
+include 'includes/footer.php';
+?>
+
+
+For ADMIN pages (admin/dashboard.php, admin/products.php, etc.):
+
+<?php
+session_start();
+require_once '../config.php';
+
+// Set page variables
+$page_title = "Admin Dashboard - Bhosale Opticians";
+$active_page = "admin";
+$base_url = "../"; // Go up one level
+
+// Include header
+include '../includes/header.php';
+?>
+
+<!-- Your page content here -->
+
+<?php
+// Include footer
+include '../includes/footer.php';
+?>
+
+
+For USER pages (user/dashboard.php, user/profile.php, etc.):
+
+<?php
+session_start();
+require_once '../config.php';
+
+// Set page variables
+$page_title = "User Dashboard - Bhosale Opticians";
+$active_page = "user";
+$base_url = "../"; // Go up one level
+
+// Include header
+include '../includes/header.php';
+?>
+
+<!-- Your page content here -->
+
+<?php
+// Include footer
+include '../includes/footer.php';
+?>
+
+
+ACTIVE PAGE OPTIONS:
+--------------------
+- "home" - Highlights Home link
+- "products" - Highlights Products link
+- "cart" - Highlights Cart link
+- "admin" - For admin pages
+- "user" - For user pages
+
+
+BENEFITS:
+---------
+1. Single source of truth - update header/footer once, applies everywhere
+2. Consistent design across all pages
+3. Dynamic features (cart count, user name, etc.)
+4. Easy maintenance
+5. Professional look with icons and modals
+6. Mobile responsive
+7. SEO friendly with proper titles
+
+
+EXISTING MODALS (from index_updated.php):
+------------------------------------------
+Make sure these modals are included on pages that need them:
+- #shippingModal (Shipping Info)
+- #returnsModal (Returns & Exchange)
+- #paymentModal (Payment Options)
+
+These are already linked in the footer Customer Service section.
+
+
+FILES CREATED:
+--------------
+✅ includes/header.php - Reusable header component
+✅ includes/footer.php - Reusable footer component
+✅ HEADER_FOOTER_GUIDE.txt - This guide
+
+
+NEXT STEPS:
+-----------
+1. Update index_updated.php to use includes
+2. Update products.php to use includes
+3. Update cart-session.php to use includes
+4. Update checkout-session.php to use includes
+5. Update all admin pages to use includes
+6. Update all user pages to use includes
+7. Update login/register pages to use includes
+
+This will make your website more maintainable and professional!
